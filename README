@@ -1,0 +1,11 @@
+An idealized OMZ ecosystem model
+
+	1. model.py is the model
+ 	2. traits.py contains traits for different microbial functional groups and their references
+	3. call_model_nopulse.py and call_model_pulse.py are used to run models without and with organic matter pulses, respectively
+ 	4. The files ended with star_Xin.py contain functions to calculate different R*
+
+Metabolic model and Flux Balance Analysis
+	1. D2M19.xml is the curated metabolic model of Marinobacteria.
+ 	2. yOM_denitrifier_steps.ipynb contains scripts of Flux Balance Analysis using different media.
+	
