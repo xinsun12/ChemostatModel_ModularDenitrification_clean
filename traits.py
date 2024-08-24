@@ -53,18 +53,12 @@ Qc_aoo = Ccell_aoo / vol_aoo / 12.0 * (6.5e-15 / Ccell_aer) # normalise to 6.5 f
 Qc_noo = Ccell_noo / vol_noo / 12.0 * (6.5e-15 / Ccell_aer) # normalise to 6.5 fg C measured for SAR11 (aerobic heterotrophs) by White et al 2019
 Qc_aox = Ccell_aox / vol_aox / 12.0 * (6.5e-15 / Ccell_aer) # normalise to 6.5 fg C measured for SAR11 (aerobic heterotrophs) by White et al 2019
 
-# diffusive oxygen and n2o coefficient
-dc = 1.5776 * 1e-5      # cm^2/s for 12C, 35psu, 50bar, Unisense Seawater and Gases table (.pdf)
-dc = dc * 1e-4 * 86400  # cm^2/s --> m^2/day
-dc_n2o = dc * 1.0049    # m^2/day (this is necessary to calculate N2O star in call_moel_XinanoxicODZ’s ‘#%% calculate R*-stars for all microbes’)
-
-
 ### 3) Yields (y), products (e) and maximum uptake rate (Vmax)
 ###     Vmax = ( mu_max * Quota ) / yield 
 ###     we remove the need for the Quota term by considering everything in mols N per mol N-biomass, such that
 ###     Vmax = mu_max / yield (units of mol N per mol N-biomass per day)
 
-### Delta G depended organic matter yield for heterotrophs (aerobes and denitrifiers)
+### Delta G depends on organic matter yield for heterotrophs (aerobes and denitrifiers)
 ##### THERMODYNAMIC DEFINITIONS
 ##### authors: Xin Sun and Emily Zakem
 
