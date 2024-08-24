@@ -85,12 +85,12 @@ DGf_N2O =  113.38 * 1e3 #J/mol (aq)
 DGf_H   =    0    * 1e3 #J/mol (aq) [H+]
 DGf_NO  =  102.06 * 1e3 #J/mol (aq)
 DGf_N2  =   18.18 * 1e3 #J/mol (aq)
-DGf_O2  =   16.54 * 1e3 #J/mol (aq) # Xin: add O2 in the list
+DGf_O2  =   16.54 * 1e3 #J/mol (aq)
 
 ## Calculating the standard free energy for the half reactions
 ## Xin: 1, 2, 3, 4 is NO3-->NO2-->NO-->N2O-->N2
 # unit of DGo below is J/mol
-DGheto = 0.5*DGf_H2O - 1/4*DGf_O2 - DGf_H # Xin: add a set for aerobic heterotrophs 
+DGheto = 0.5*DGf_H2O - 1/4*DGf_O2 - DGf_H 
 DG1o = 0.5*DGf_NO2 + 0.5*DGf_H2O - 0.5*DGf_NO3 - DGf_H 
 DG4o = 0.5*DGf_N2 + 0.5*DGf_H2O - 0.5*DGf_N2O - DGf_H 
 DG123o = 1/8*DGf_N2O + 5/8*DGf_H2O - 1/4*DGf_NO3 - 5/4*DGf_H 
