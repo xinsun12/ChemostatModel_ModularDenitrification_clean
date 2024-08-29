@@ -53,7 +53,7 @@ if dil == 0:
     nn_output = days/out_at_day     # number of entries for output
     print("dilution = 0, check N balance")
 else:
-    days = 1e4  # number of days to run chemostat
+    days = 5e4  # number of days to run chemostat
     dt = 0.001  # timesteps length (days)
     timesteps = days/dt     # number of timesteps
     out_at_day = dt         # output results this often
@@ -85,13 +85,6 @@ fin_b4Den = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_b5Den = np.ones((len(outputd1), len(outputd2))) * np.nan 
 fin_b6Den = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_b7Den = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_bHetC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_b1DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_b2DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_b3DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_b4DenC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_b5DenC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_b6DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_bAOO = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_bNOO = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_bAOX = np.ones((len(outputd1), len(outputd2))) * np.nan
@@ -104,13 +97,6 @@ fin_u4Den = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_u5Den = np.ones((len(outputd1), len(outputd2))) * np.nan 
 fin_u6Den = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_u7Den = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_uHetC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_u1DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_u2DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_u3DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
-fin_u4DenC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_u5DenC = np.ones((len(outputd1), len(outputd2))) * np.nan 
-fin_u6DenC = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_uAOO = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_uNOO = np.ones((len(outputd1), len(outputd2))) * np.nan
 fin_uAOX = np.ones((len(outputd1), len(outputd2))) * np.nan
@@ -147,20 +133,12 @@ O2_star_noo = R_star(dil, K_o2_noo, mumax_NOO / y_oNOO, y_oNOO) * 1e3
 N2O_star_den5 = R_star(dil, K_n2o_Den, VmaxN_5Den, y_n5N2O) * 1e3
 # OM
 OM_star_aer = R_star(dil, K_s, VmaxS, y_oHet)
-OM_star_aerC = R_star(dil, K_sC, VmaxSC, y_oHet)
 OM_star_den1 = R_star(dil, K_s, VmaxS, y_n1Den)
 OM_star_den2 = R_star(dil, K_s, VmaxS, y_n2Den)
 OM_star_den3 = R_star(dil, K_s, VmaxS, y_n3Den)
 OM_star_den4 = R_star(dil, K_s, VmaxS, y_n4Den)
 OM_star_den5 = R_star(dil, K_s, VmaxS, y_n5Den)
 OM_star_den6 = R_star(dil, K_s, VmaxS, y_n6Den)
-#add 6 copiotrophic denitrifiers
-OM_star_den1C = R_star(dil, K_sC, VmaxSC, y_n1Den)
-OM_star_den2C = R_star(dil, K_sC, VmaxSC, y_n2Den)
-OM_star_den3C = R_star(dil, K_sC, VmaxSC, y_n3Den)
-OM_star_den4C = R_star(dil, K_sC, VmaxSC, y_n4Den)
-OM_star_den5C = R_star(dil, K_sC, VmaxSC, y_n5Den)
-OM_star_den6C = R_star(dil, K_sC, VmaxSC, y_n6Den)
 # Ammonia
 Amm_star_aoo = R_star(dil, K_n_AOO, VmaxN_AOO, y_nAOO)
 Amm_star_aox = R_star(dil, K_nh4_AOX, VmaxNH4_AOX, y_nh4AOX)
@@ -203,17 +181,7 @@ for k in np.arange(len(outputd1)):
         in_b2Den = 0.1 # NO2-->N2
         in_b3Den = 0.1 # complete denitrifier
         in_b6Den = 0.1 # NO3-->N2O
-        in_b7Den = 0#.1 # bookend: NO3-->NO2, N2O-->N2
-        # all copiotrophic heterotrophs
-        in_copio = 0#.1
-        in_bHetC = in_copio
-        in_b1DenC = in_copio # NO3-->NO2, cross-feed
-        in_b4DenC = in_copio # N2O producer (NO2-->N2O), cross-feed
-        in_b5DenC = in_copio # N2O consumer (N2O-->N2), cross-feed
-        in_b2DenC = in_copio # NO2-->N2
-        in_b3DenC = in_copio # complete denitrifier
-        in_b6DenC = in_copio # N2O producer (NO3-->N2O)
-        
+        in_b7Den = 0#.1 # bookend: NO3-->NO2, N2O-->N2    
         in_bAOO = 0.1
         in_bNOO = 0.1
         in_bAOX = 0.1
@@ -230,7 +198,7 @@ for k in np.arange(len(outputd1)):
                            K_o2_aer, K_o2_aoo, K_o2_noo, \
                            K_n2o_Den, \
                            mumax_Het, mumax_AOO, mumax_NOO, mumax_AOX, \
-                           VmaxS, K_s, VmaxSC, K_sC, \
+                           VmaxS, K_s, \
                            VmaxN_1Den, VmaxN_2Den, VmaxN_3Den, VmaxN_4Den, VmaxN_5Den, VmaxN_6Den, K_n_Den, \
                            VmaxN_AOO, K_n_AOO, VmaxN_NOO, K_n_NOO, \
                            VmaxNH4_AOX, K_nh4_AOX, VmaxNO2_AOX, K_no2_AOX, \
@@ -239,8 +207,7 @@ for k in np.arange(len(outputd1)):
                            y_nAOO, y_oAOO, y_nNOO, y_oNOO, y_nh4AOX, y_no2AOX, \
                            e_n2Den, e_n3Den, e_no3AOX, e_n2AOX, e_n4Den, e_n5Den, e_n6Den, e_n1Den, \
                            initialOM, initialNO2, in_Sd, in_O2, in_NO3, in_NO2, in_NH4, in_N2, in_N2O, \
-                           in_bHet, in_b1Den, in_b2Den, in_b3Den, in_bAOO, in_bNOO, in_bAOX, in_b4Den, in_b5Den, in_b6Den, in_b7Den,\
-                           in_bHetC, in_b1DenC, in_b2DenC, in_b3DenC, in_b4DenC, in_b5DenC, in_b6DenC)
+                           in_bHet, in_b1Den, in_b2Den, in_b3Den, in_bAOO, in_bNOO, in_bAOX, in_b4Den, in_b5Den, in_b6Den, in_b7Den)
         
         out_Sd = results[0]
         out_O2 = results[1]
@@ -256,47 +223,33 @@ for k in np.arange(len(outputd1)):
         out_b4Den = results[11]
         out_b5Den = results[12]
         out_b6Den = results[13]
-        out_bHetC = results[14]
-        out_b1DenC = results[15]
-        out_b2DenC = results[16]
-        out_b3DenC = results[17]
-        out_b4DenC = results[18]
-        out_b5DenC = results[19]
-        out_b6DenC = results[20]
-        out_bAOO = results[21]
-        out_bNOO = results[22]
-        out_bAOX = results[23]
-        out_uHet = results[24]
-        out_u1Den = results[25]
-        out_u2Den = results[26]
-        out_u3Den = results[27]
-        out_u4Den = results[28]
-        out_u5Den = results[29]
-        out_u6Den = results[30]
-        out_uHetC = results[31]
-        out_u1DenC = results[32]
-        out_u2DenC = results[33]
-        out_u3DenC = results[34]
-        out_u4DenC = results[35]
-        out_u5DenC = results[36]
-        out_u6DenC = results[37]      
-        out_uAOO = results[38]
-        out_uNOO = results[39]
-        out_uAOX = results[40]
-        out_rHet = results[41]
-        out_rHetAer = results[42]
-        out_rO2C = results[43]
-        out_r1Den = results[44]
-        out_r2Den = results[45]
-        out_r3Den = results[46]
-        out_r4Den = results[47]
-        out_r5Den = results[48]
-        out_r6Den = results[49]
-        out_rAOO = results[50]
-        out_rNOO = results[51]
-        out_rAOX = results[52]     
-        out_b7Den = results[53]
-        out_u7Den = results[54]
+        out_bAOO = results[14]
+        out_bNOO = results[15]
+        out_bAOX = results[16]
+        out_uHet = results[17]
+        out_u1Den = results[18]
+        out_u2Den = results[19]
+        out_u3Den = results[20]
+        out_u4Den = results[21]
+        out_u5Den = results[22]
+        out_u6Den = results[23]
+        out_uAOO = results[24]
+        out_uNOO = results[25]
+        out_uAOX = results[26]
+        out_rHet = results[27]
+        out_rHetAer = results[28]
+        out_rO2C = results[29]
+        out_r1Den = results[30]
+        out_r2Den = results[31]
+        out_r3Den = results[32]
+        out_r4Den = results[33]
+        out_r5Den = results[34]
+        out_r6Den = results[35]
+        out_rAOO = results[36]
+        out_rNOO = results[37]
+        out_rAOX = results[38]     
+        out_b7Den = results[39]
+        out_u7Den = results[40]
         
     
         # 4) Record solutions in initialised arrays
@@ -315,13 +268,6 @@ for k in np.arange(len(outputd1)):
         fin_b5Den[k,m] = np.nanmean(out_b5Den[-nn_outputforaverage::]) 
         fin_b6Den[k,m] = np.nanmean(out_b6Den[-nn_outputforaverage::])
         fin_b7Den[k,m] = np.nanmean(out_b7Den[-nn_outputforaverage::]) 
-        fin_bHetC[k,m] = np.nanmean(out_bHetC[-nn_outputforaverage::])
-        fin_b1DenC[k,m] = np.nanmean(out_b1DenC[-nn_outputforaverage::])
-        fin_b2DenC[k,m] = np.nanmean(out_b2DenC[-nn_outputforaverage::])
-        fin_b3DenC[k,m] = np.nanmean(out_b3DenC[-nn_outputforaverage::])
-        fin_b4DenC[k,m] = np.nanmean(out_b4DenC[-nn_outputforaverage::]) 
-        fin_b5DenC[k,m] = np.nanmean(out_b5DenC[-nn_outputforaverage::]) 
-        fin_b6DenC[k,m] = np.nanmean(out_b6DenC[-nn_outputforaverage::]) 
         fin_bAOO[k,m] = np.nanmean(out_bAOO[-nn_outputforaverage::])
         fin_bNOO[k,m] = np.nanmean(out_bNOO[-nn_outputforaverage::])
         fin_bAOX[k,m] = np.nanmean(out_bAOX[-nn_outputforaverage::])
@@ -333,13 +279,6 @@ for k in np.arange(len(outputd1)):
         fin_u5Den[k,m] = np.nanmean(out_u5Den[-nn_outputforaverage::]) 
         fin_u6Den[k,m] = np.nanmean(out_u6Den[-nn_outputforaverage::]) 
         fin_u7Den[k,m] = np.nanmean(out_u7Den[-nn_outputforaverage::])
-        fin_uHetC[k,m] = np.nanmean(out_uHetC[-nn_outputforaverage::])
-        fin_u1DenC[k,m] = np.nanmean(out_u1DenC[-nn_outputforaverage::])
-        fin_u2DenC[k,m] = np.nanmean(out_u2DenC[-nn_outputforaverage::])
-        fin_u3DenC[k,m] = np.nanmean(out_u3DenC[-nn_outputforaverage::])
-        fin_u4DenC[k,m] = np.nanmean(out_u4DenC[-nn_outputforaverage::]) 
-        fin_u5DenC[k,m] = np.nanmean(out_u5DenC[-nn_outputforaverage::]) 
-        fin_u6DenC[k,m] = np.nanmean(out_u6DenC[-nn_outputforaverage::]) 
         fin_uAOO[k,m] = np.nanmean(out_uAOO[-nn_outputforaverage::])
         fin_uNOO[k,m] = np.nanmean(out_uNOO[-nn_outputforaverage::])
         fin_uAOX[k,m] = np.nanmean(out_uAOX[-nn_outputforaverage::])
@@ -361,7 +300,6 @@ for k in np.arange(len(outputd1)):
 del results
 del out_Sd, out_O2, out_NO3, out_NO2, out_NH4, out_N2, out_N2O
 del out_bHet, out_b1Den, out_b2Den, out_b3Den, out_b4Den, out_b5Den, out_b6Den, out_b7Den, out_bAOO, out_bNOO, out_bAOX
-del out_bHetC, out_b1DenC, out_b2DenC, out_b3DenC, out_b4DenC, out_b5DenC, out_b6DenC
 del out_uHet, out_u1Den, out_u2Den, out_u3Den, out_u4Den, out_u5Den, out_u6Den, out_u7Den, out_uAOO, out_uNOO, out_uAOX
 del out_uHetC, out_u1DenC, out_u2DenC, out_u3DenC, out_u4DenC, out_u5DenC, out_u6DenC,
 del out_rHet, out_rHetAer, out_rO2C, out_r1Den, out_r2Den, out_r3Den, out_r4Den, out_r5Den, out_r6Den, out_rAOO, out_rNOO, out_rAOX
@@ -1100,13 +1038,6 @@ np.savetxt(fname+'_b7Den.txt', fin_b7Den, delimiter='\t')
 np.savetxt(fname+'_bAOO.txt', fin_bAOO, delimiter='\t')
 np.savetxt(fname+'_bNOO.txt', fin_bNOO, delimiter='\t')
 np.savetxt(fname+'_bAOX.txt', fin_bAOX, delimiter='\t')
-np.savetxt(fname+'_bHetC.txt', fin_bHetC, delimiter='\t')
-np.savetxt(fname+'_b1DenC.txt', fin_b1DenC, delimiter='\t')
-np.savetxt(fname+'_b2DenC.txt', fin_b2DenC, delimiter='\t')
-np.savetxt(fname+'_b3DenC.txt', fin_b3DenC, delimiter='\t')
-np.savetxt(fname+'_b4DenC.txt', fin_b4DenC, delimiter='\t')
-np.savetxt(fname+'_b5DenC.txt', fin_b5DenC, delimiter='\t')
-np.savetxt(fname+'_b6DenC.txt', fin_b6DenC, delimiter='\t')
 
 np.savetxt(fname+'_uHet.txt', fin_uHet, delimiter='\t')
 np.savetxt(fname+'_u1Den.txt', fin_u1Den, delimiter='\t')
@@ -1119,14 +1050,6 @@ np.savetxt(fname+'_u7Den.txt', fin_u7Den, delimiter='\t')
 np.savetxt(fname+'_uAOO.txt', fin_uAOO, delimiter='\t')
 np.savetxt(fname+'_uNOO.txt', fin_uNOO, delimiter='\t')
 np.savetxt(fname+'_uAOX.txt', fin_uAOX, delimiter='\t')
-np.savetxt(fname+'_uHetC.txt', fin_uHetC, delimiter='\t')
-np.savetxt(fname+'_u1DenC.txt', fin_u1DenC, delimiter='\t')
-np.savetxt(fname+'_u2DenC.txt', fin_u2DenC, delimiter='\t')
-np.savetxt(fname+'_u3DenC.txt', fin_u3DenC, delimiter='\t')
-np.savetxt(fname+'_u4DenC.txt', fin_u4DenC, delimiter='\t')
-np.savetxt(fname+'_u5DenC.txt', fin_u5DenC, delimiter='\t')
-np.savetxt(fname+'_u6DenC.txt', fin_u6DenC, delimiter='\t')
-
 
 np.savetxt(fname+'_rHet.txt', fin_rHet, delimiter='\t')
 np.savetxt(fname+'_rHetAer.txt', fin_rHetAer, delimiter='\t')
@@ -1140,5 +1063,3 @@ np.savetxt(fname+'_rAOO.txt', fin_rAOO, delimiter='\t')
 np.savetxt(fname+'_rNOO.txt', fin_rNOO, delimiter='\t')
 np.savetxt(fname+'_rAOX.txt', fin_rAOX, delimiter='\t')
 np.savetxt(fname+'_rO2C.txt', fin_rO2C, delimiter='\t')
-
-
