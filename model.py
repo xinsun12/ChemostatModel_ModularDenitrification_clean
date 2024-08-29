@@ -23,7 +23,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
              K_o2_aer, K_o2_aoo, K_o2_noo, \
              K_n2o_Den, \
              mumax_Het, mumax_AOO, mumax_NOO, mumax_AOX, \
-             VmaxS, K_s, VmaxSC, K_sC, \
+             VmaxS, K_s, \
              VmaxN_1Den, VmaxN_2Den, VmaxN_3Den, VmaxN_4Den, VmaxN_5Den, VmaxN_6Den, K_n_Den, \
              VmaxN_AOO, K_n_AOO, VmaxN_NOO, K_n_NOO, \
              VmaxNH4_AOX, K_nh4_AOX, VmaxNO2_AOX, K_no2_AOX, \
@@ -32,18 +32,17 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
              y_nAOO, y_oAOO, y_nNOO, y_oNOO, y_nh4AOX, y_no2AOX, \
              e_n2Den, e_n3Den, e_no3AOX, e_n2AOX, e_n4Den, e_n5Den, e_n6Den, e_n1Den, \
              initialOM, initialNO2, in_Sd, in_O2, in_NO3, in_NO2, in_NH4, in_N2, in_N2O, \
-             in_bHet, in_b1Den, in_b2Den, in_b3Den, in_bAOO, in_bNOO, in_bAOX, in_b4Den, in_b5Den, in_b6Den, in_b7Den,\
-             in_bHetC, in_b1DenC, in_b2DenC, in_b3DenC, in_b4DenC, in_b5DenC, in_b6DenC):
+             in_bHet, in_b1Den, in_b2Den, in_b3Den, in_bAOO, in_bNOO, in_bAOX, in_b4Den, in_b5Den, in_b6Den, in_b7Den):
     
     
     # transfer initial inputs to model variables
-    m_Sd = initialOM#in_Sd #10 change intial OM m_Sd to 10 µM and see what happens 
-    m_O2 = in_O2 # make sure the unit is O2 not O for m_O2
+    m_Sd = initialOM
+    m_O2 = in_O2
     m_NO3 = in_NO3
     m_NO2 = initialNO2
     m_NH4 = in_NH4
-    m_N2 = in_N2  # make sure the unit is N-N2 for m_N2
-    m_N2O = in_N2O  # make sure the unit is N-N2O (mmol-N/m3 = µM) for m_N2O 
+    m_N2 = in_N2
+    m_N2O = in_N2O
     m_bHet = in_bHet
     m_b1Den = in_b1Den
     m_b2Den = in_b2Den
@@ -52,13 +51,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     m_b5Den = in_b5Den
     m_b6Den = in_b6Den
     m_b7Den = in_b7Den
-    m_bHetC = in_bHetC
-    m_b1DenC = in_b1DenC
-    m_b2DenC = in_b2DenC
-    m_b3DenC = in_b3DenC
-    m_b4DenC = in_b4DenC
-    m_b5DenC = in_b5DenC
-    m_b6DenC = in_b6DenC
     m_bAOO = in_bAOO
     m_bNOO = in_bNOO
     m_bAOX = in_bAOX
@@ -79,13 +71,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     out_b5Den = np.ones((int(nn_output)+1)) * np.nan
     out_b6Den = np.ones((int(nn_output)+1)) * np.nan
     out_b7Den = np.ones((int(nn_output)+1)) * np.nan
-    out_bHetC = np.ones((int(nn_output)+1)) * np.nan
-    out_b1DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_b2DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_b3DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_b4DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_b5DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_b6DenC = np.ones((int(nn_output)+1)) * np.nan
     out_bAOO = np.ones((int(nn_output)+1)) * np.nan
     out_bNOO = np.ones((int(nn_output)+1)) * np.nan
     out_bAOX = np.ones((int(nn_output)+1)) * np.nan
@@ -96,14 +81,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     out_u4Den = np.ones((int(nn_output)+1)) * np.nan
     out_u5Den = np.ones((int(nn_output)+1)) * np.nan
     out_u6Den = np.ones((int(nn_output)+1)) * np.nan
-    out_u7Den = np.ones((int(nn_output)+1)) * np.nan
-    out_uHetC = np.ones((int(nn_output)+1)) * np.nan
-    out_u1DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_u2DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_u3DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_u4DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_u5DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_u6DenC = np.ones((int(nn_output)+1)) * np.nan       
+    out_u7Den = np.ones((int(nn_output)+1)) * np.nan      
     out_uAOO = np.ones((int(nn_output)+1)) * np.nan
     out_uNOO = np.ones((int(nn_output)+1)) * np.nan
     out_uAOX = np.ones((int(nn_output)+1)) * np.nan
@@ -115,13 +93,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     out_r3Den = np.ones((int(nn_output)+1)) * np.nan
     out_r4Den = np.ones((int(nn_output)+1)) * np.nan
     out_r5Den = np.ones((int(nn_output)+1)) * np.nan
-    out_r6Den = np.ones((int(nn_output)+1)) * np.nan
-    out_r1DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_r2DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_r3DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_r4DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_r5DenC = np.ones((int(nn_output)+1)) * np.nan
-    out_r6DenC = np.ones((int(nn_output)+1)) * np.nan      
+    out_r6Den = np.ones((int(nn_output)+1)) * np.nan     
     out_rAOO = np.ones((int(nn_output)+1)) * np.nan
     out_rNOO = np.ones((int(nn_output)+1)) * np.nan
     out_rAOX = np.ones((int(nn_output)+1)) * np.nan
@@ -147,13 +119,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     out_b5Den[i] = m_b5Den
     out_b6Den[i] = m_b6Den
     out_b7Den[i] = m_b7Den
-    out_bHetC[i] = m_bHetC
-    out_b1DenC[i] = m_b1DenC
-    out_b2DenC[i] = m_b2DenC
-    out_b3DenC[i] = m_b3DenC 
-    out_b4DenC[i] = m_b4DenC 
-    out_b5DenC[i] = m_b5DenC 
-    out_b6DenC[i] = m_b6DenC
     out_bAOO[i] = m_bAOO
     out_bNOO[i] = m_bNOO
     out_bAOX[i] = m_bAOX
@@ -174,7 +139,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         p_N2O_den = VmaxN_5Den * m_N2O / (K_n2o_Den + m_N2O)
       
         p_Sd = VmaxS * m_Sd / (K_s + m_Sd)                               # mol Org / day
-        p_SdC = VmaxSC * m_Sd / (K_sC + m_Sd)              #Copiotroph
         p_1DenNO3 = VmaxN_1Den * m_NO3 / (K_n_Den + m_NO3)               # mol NO3 / day
         p_2DenNO2 = VmaxN_2Den * m_NO2 / (K_n_Den + m_NO2)               # mol NO2 / day
         p_3DenNO3 = VmaxN_3Den * m_NO3 / (K_n_Den + m_NO3)               # mol NO3 / day
@@ -214,10 +178,9 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         ###
                    
         ### rates
-        # aerobic OM uptake rate (add Copio 1aer)
-        aer_heterotrophy = u_Het * m_bHet / y_oHet      \
-                           + u_HetC * m_bHetC / y_oHet
-        # total OM uptake rate, add new functional types (add Copio 1aer + 6 den)
+        # aerobic OM uptake rate
+        aer_heterotrophy = u_Het * m_bHet / y_oHet
+        # total OM uptake rate, add new functional types
         if np.fmin(p_Sd * y_n7Den_NO3, p_1DenNO3 * y_n7NO3) >= np.fmin(p_Sd * y_n7Den_N2O, p_N2O_den * y_n7N2O):      
             heterotrophy = u_Het * m_bHet / y_oHet      \
                            + u_1Den * m_b1Den / y_n1Den \
@@ -226,14 +189,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
                            + u_4Den * m_b4Den / y_n4Den \
                            + u_5Den * m_b5Den / y_n5Den \
                            + u_6Den * m_b6Den / y_n6Den \
-                           + u_7Den * m_b7Den / y_n7Den_NO3 \
-                           + u_HetC * m_bHetC / y_oHet \
-                           + u_1DenC * m_b1DenC / y_n1Den \
-                           + u_2DenC * m_b2DenC / y_n2Den \
-                           + u_3DenC * m_b3DenC / y_n3Den \
-                           + u_4DenC * m_b4DenC / y_n4Den \
-                           + u_5DenC * m_b5DenC / y_n5Den \
-                           + u_6DenC * m_b6DenC / y_n6Den 
+                           + u_7Den * m_b7Den / y_n7Den_NO3
         else:
             heterotrophy = u_Het * m_bHet / y_oHet      \
                            + u_1Den * m_b1Den / y_n1Den \
@@ -242,20 +198,12 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
                            + u_4Den * m_b4Den / y_n4Den \
                            + u_5Den * m_b5Den / y_n5Den \
                            + u_6Den * m_b6Den / y_n6Den \
-                           + u_7Den * m_b7Den / y_n7Den_N2O \
-                           + u_HetC * m_bHetC / y_oHet \
-                           + u_1DenC * m_b1DenC / y_n1Den \
-                           + u_2DenC * m_b2DenC / y_n2Den \
-                           + u_3DenC * m_b3DenC / y_n3Den \
-                           + u_4DenC * m_b4DenC / y_n4Den \
-                           + u_5DenC * m_b5DenC / y_n5Den \
-                           + u_6DenC * m_b6DenC / y_n6Den 
-        # Oxygen consumption rate (add Copio 1aer)
+                           + u_7Den * m_b7Den / y_n7Den_N2O
+        # Oxygen consumption rate
         oxy_consumption = u_Het * m_bHet / y_oO2    \
-                          + u_HetC * m_bHetC / y_oO2 \
                           + u_AOO * m_bAOO / y_oAOO \
                           + u_NOO * m_bNOO / y_oNOO
-        # DIN uptake rates (add Copio 6 den)
+        # DIN uptake rates
         ammonia_ox = u_AOO * m_bAOO / y_nAOO   # ammonia uptake rate by AOA
         nitrite_ox = u_NOO * m_bNOO / y_nNOO   # nitrite uptake rate by NOB
         anammox_nh4 = u_AOX * m_bAOX / y_nh4AOX  # ammonia uptake rate by anammox bacteria
@@ -264,32 +212,20 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         
         if np.fmin(p_Sd * y_n7Den_NO3, p_1DenNO3 * y_n7NO3) >= np.fmin(p_Sd * y_n7Den_N2O, p_N2O_den * y_n7N2O):
             den_nar = u_1Den * m_b1Den / y_n1NO3        \
-                      + u_1DenC * m_b1DenC / y_n1NO3    \
                       + u_7Den * m_b7Den / y_n7NO3
-            den_nir = u_2Den * m_b2Den / y_n2NO2 \
-                      + u_2DenC * m_b2DenC / y_n2NO2  # nitrite uptake rate by NO2-->N2 
-            den_full = u_3Den * m_b3Den / y_n3NO3 \
-                       + u_3DenC * m_b3DenC / y_n3NO3 # nitrate uptake rate by NO3-->N2
-            den_NitritetoN2O = u_4Den * m_b4Den / y_n4NO2 \
-                               + u_4DenC * m_b4DenC / y_n4NO2 # nitrite uptake rate by NO2-->N2O                       
-            den_N2OtoN2 = u_5Den * m_b5Den / y_n5N2O \
-                          + u_5DenC * m_b5DenC / y_n5N2O # N2O uptake rate by N2O-->N2
-            den_NitratetoN2O = u_6Den * m_b6Den / y_n6NO3 \
-                               + u_6DenC * m_b6DenC / y_n6NO3 # nitrate uptake rate by NO3-->N2O
+            den_nir = u_2Den * m_b2Den / y_n2NO2  # nitrite uptake rate by NO2-->N2 
+            den_full = u_3Den * m_b3Den / y_n3NO3 # nitrate uptake rate by NO3-->N2
+            den_NitritetoN2O = u_4Den * m_b4Den / y_n4NO2 # nitrite uptake rate by NO2-->N2O                       
+            den_N2OtoN2 = u_5Den * m_b5Den / y_n5N2O # N2O uptake rate by N2O-->N2
+            den_NitratetoN2O = u_6Den * m_b6Den / y_n6NO3 # nitrate uptake rate by NO3-->N2O
         else:
-            den_nar = u_1Den * m_b1Den / y_n1NO3        \
-                      + u_1DenC * m_b1DenC / y_n1NO3                     
-            den_nir = u_2Den * m_b2Den / y_n2NO2 \
-                      + u_2DenC * m_b2DenC / y_n2NO2  # nitrite uptake rate by NO2-->N2 
-            den_full = u_3Den * m_b3Den / y_n3NO3 \
-                       + u_3DenC * m_b3DenC / y_n3NO3 # nitrate uptake rate by NO3-->N2
-            den_NitritetoN2O = u_4Den * m_b4Den / y_n4NO2 \
-                               + u_4DenC * m_b4DenC / y_n4NO2 # nitrite uptake rate by NO2-->N2O                       
+            den_nar = u_1Den * m_b1Den / y_n1NO3                     
+            den_nir = u_2Den * m_b2Den / y_n2NO2 # nitrite uptake rate by NO2-->N2 
+            den_full = u_3Den * m_b3Den / y_n3NO3 # nitrate uptake rate by NO3-->N2
+            den_NitritetoN2O = u_4Den * m_b4Den / y_n4NO2 # nitrite uptake rate by NO2-->N2O                       
             den_N2OtoN2 = u_5Den * m_b5Den / y_n5N2O \
-                          + u_7Den * m_b7Den / y_n7N2O \
-                          + u_5DenC * m_b5DenC / y_n5N2O # N2O uptake rate by N2O-->N2
-            den_NitratetoN2O = u_6Den * m_b6Den / y_n6NO3 \
-                               + u_6DenC * m_b6DenC / y_n6NO3 # nitrate uptake rate by NO3-->N2O
+                          + u_7Den * m_b7Den / y_n7N2O # N2O uptake rate by N2O-->N2
+            den_NitratetoN2O = u_6Den * m_b6Den / y_n6NO3 # nitrate uptake rate by NO3-->N2O
                
         
         ## Below are the change of OM, DIN.. over time. For example, d[OM]/dt, d[NO3]/dt
@@ -318,7 +254,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         
         
         if np.fmin(p_Sd * y_n7Den_NO3, p_1DenNO3 * y_n7NO3) >= np.fmin(p_Sd * y_n7Den_N2O, p_N2O_den * y_n7N2O):
-            # Ammonium (consumed by 6, 7, 8) (produced by 1, 2, 3, 4, 5, 54, 55, 56) (Add copio 1 aer + 6 den)
+            # Ammonium (consumed by 6, 7, 8) (produced by 1, 2, 3, 4, 5, 54, 55, 56)
             ddt_NH4 = dil * (in_NH4 - m_NH4)        \
                      - ammonia_ox                   \
                      - anammox_nh4                  \
@@ -330,26 +266,16 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
                      + u_4Den * m_b4Den * (1./y_n4Den - 1) \
                      + u_5Den * m_b5Den * (1./y_n5Den - 1) \
                      + u_6Den * m_b6Den * (1./y_n6Den - 1) \
-                     + u_7Den * m_b7Den * (1./y_n7Den_NO3 - 1) \
-                     + u_HetC * m_bHetC * (1./y_oHet - 1)    \
-                     + u_1DenC * m_b1DenC * (1./y_n1Den - 1) \
-                     + u_2DenC * m_b2DenC * (1./y_n2Den - 1) \
-                     + u_3DenC * m_b3DenC * (1./y_n3Den - 1) \
-                     + u_4DenC * m_b4DenC * (1./y_n4Den - 1) \
-                     + u_5DenC * m_b5DenC * (1./y_n5Den - 1) \
-                     + u_6DenC * m_b6DenC * (1./y_n6Den - 1) \
-            # Dinitrogen gas (produced by 4, 5, 8, 55) (Add copio 3 den)
+                     + u_7Den * m_b7Den * (1./y_n7Den_NO3 - 1)
+            # Dinitrogen gas (produced by 4, 5, 8, 55)
             ddt_N2 = dil * (in_N2-m_N2)             \
                      + u_2Den * m_b2Den * e_n2Den   \
                      + u_3Den * m_b3Den * e_n3Den   \
                      + u_5Den * m_b5Den * e_n5Den \
-                     + u_2DenC * m_b2DenC * e_n2Den  \
-                     + u_3DenC * m_b3DenC * e_n3Den  \
-                     + u_5DenC * m_b5DenC * e_n5Den \
                      + u_AOX * m_bAOX * e_n2AOX
 
         else:
-            # Ammonium (consumed by 6, 7, 8) (produced by 1, 2, 3, 4, 5, 54, 55, 56) (Add copio 1 aer + 6 den)
+            # Ammonium (consumed by 6, 7, 8) (produced by 1, 2, 3, 4, 5, 54, 55, 56)
             ddt_NH4 = dil * (in_NH4 - m_NH4)        \
                      - ammonia_ox                   \
                      - anammox_nh4                  \
@@ -361,31 +287,19 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
                      + u_4Den * m_b4Den * (1./y_n4Den - 1) \
                      + u_5Den * m_b5Den * (1./y_n5Den - 1) \
                      + u_6Den * m_b6Den * (1./y_n6Den - 1) \
-                     + u_7Den * m_b7Den * (1./y_n7Den_N2O - 1) \
-                     + u_HetC * m_bHetC * (1./y_oHet - 1)    \
-                     + u_1DenC * m_b1DenC * (1./y_n1Den - 1) \
-                     + u_2DenC * m_b2DenC * (1./y_n2Den - 1) \
-                     + u_3DenC * m_b3DenC * (1./y_n3Den - 1) \
-                     + u_4DenC * m_b4DenC * (1./y_n4Den - 1) \
-                     + u_5DenC * m_b5DenC * (1./y_n5Den - 1) \
-                     + u_6DenC * m_b6DenC * (1./y_n6Den - 1) \
-            # Dinitrogen gas (produced by 4, 5, 8, 55) (Add copio 3 den)
+                     + u_7Den * m_b7Den * (1./y_n7Den_N2O - 1)
+            # Dinitrogen gas (produced by 4, 5, 8, 55)
             ddt_N2 = dil * (in_N2-m_N2)             \
                      + u_2Den * m_b2Den * e_n2Den   \
                      + u_3Den * m_b3Den * e_n3Den   \
                      + u_5Den * m_b5Den * e_n5Den \
-                     + u_7Den * m_b7Den * e_n7Den_N2O \
-                     + u_2DenC * m_b2DenC * e_n2Den  \
-                     + u_3DenC * m_b3DenC * e_n3Den  \
-                     + u_5DenC * m_b5DenC * e_n5Den \
+                     + u_7Den * m_b7Den * e_n7Den_N2O
                      + u_AOX * m_bAOX * e_n2AOX
 
-        # N2O gas (produced by 54 and 56) (consumed by 55) (Add copio 3 den)
+        # N2O gas (produced by 54 and 56) (consumed by 55)
         ddt_N2O = dil * (in_N2O-m_N2O)          \
                  + u_4Den * m_b4Den * e_n4Den   \
                  + u_6Den * m_b6Den * e_n6Den   \
-                 + u_4DenC * m_b4DenC * e_n4Den   \
-                 + u_6DenC * m_b6DenC * e_n6Den   \
                  - den_N2OtoN2       
        
          
@@ -413,29 +327,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         # Biomass of bookend NO3-->NO2, N2O-->N2
         ddt_b7Den = dil * (-m_b7Den)            \
                    + u_7Den * m_b7Den       
-    # (Add copi) 
-        # Biomass of aerobic heterotrophs
-        ddt_bHetC = dil * (-m_bHetC)          \
-                    + u_HetC * m_bHetC    
-        # Biomass of nitrate denitrifiers
-        ddt_b1DenC = dil * (-m_b1DenC)            \
-                   + u_1DenC * m_b1DenC     
-        # Biomass of nitrite denitrifiers
-        ddt_b2DenC = dil * (-m_b2DenC)            \
-                   + u_2DenC * m_b2DenC       
-        # Biomass of full denitrifiers
-        ddt_b3DenC = dil * (-m_b3DenC)            \
-                   + u_3DenC * m_b3DenC 
-        # Biomass of NO2-->N2O
-        ddt_b4DenC = dil * (-m_b4DenC)            \
-                   + u_4DenC * m_b4DenC 
-        # Biomass of N2O-->N2
-        ddt_b5DenC = dil * (-m_b5DenC)            \
-                   + u_5DenC * m_b5DenC          
-        # Biomass of NO3-->N2O
-        ddt_b6DenC = dil * (-m_b6DenC)            \
-                   + u_6DenC * m_b6DenC               
-    # end
         # Biomass of AOA
         ddt_bAOO = dil * (-m_bAOO)              \
                    + u_AOO * m_bAOO       
@@ -463,15 +354,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         m_b5Den = m_b5Den + ddt_b5Den * dt
         m_b6Den = m_b6Den + ddt_b6Den * dt
         m_b7Den = m_b7Den + ddt_b7Den * dt
-        # add Copio (1 aer + 6 den)
-        m_bHetC = m_bHetC + ddt_bHetC * dt
-        m_b1DenC = m_b1DenC + ddt_b1DenC * dt
-        m_b2DenC = m_b2DenC + ddt_b2DenC * dt
-        m_b3DenC = m_b3DenC + ddt_b3DenC * dt
-        m_b4DenC = m_b4DenC + ddt_b4DenC * dt # add biomass of Den4
-        m_b5DenC = m_b5DenC + ddt_b5DenC * dt # add biomass of Den5
-        m_b6DenC = m_b6DenC + ddt_b6DenC * dt # add biomass of Den6
-        # end
         m_bAOO = m_bAOO + ddt_bAOO * dt
         m_bNOO = m_bNOO + ddt_bNOO * dt
         m_bAOX = m_bAOX + ddt_bAOX * dt
@@ -501,13 +383,6 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             out_b4Den[i] = m_b4Den
             out_b5Den[i] = m_b5Den
             out_b6Den[i] = m_b6Den
-            out_bHetC[i] = m_bHetC
-            out_b1DenC[i] = m_b1DenC
-            out_b2DenC[i] = m_b2DenC
-            out_b3DenC[i] = m_b3DenC
-            out_b4DenC[i] = m_b4DenC
-            out_b5DenC[i] = m_b5DenC
-            out_b6DenC[i] = m_b6DenC
             out_bAOO[i] = m_bAOO
             out_bNOO[i] = m_bNOO
             out_bAOX[i] = m_bAOX
@@ -517,14 +392,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             out_u3Den[i] = u_3Den 
             out_u4Den[i] = u_4Den
             out_u5Den[i] = u_5Den
-            out_u6Den[i] = u_6Den
-            out_uHetC[i] = u_HetC
-            out_u1DenC[i] = u_1DenC
-            out_u2DenC[i] = u_2DenC
-            out_u3DenC[i] = u_3DenC 
-            out_u4DenC[i] = u_4DenC
-            out_u5DenC[i] = u_5DenC
-            out_u6DenC[i] = u_6DenC           
+            out_u6Den[i] = u_6Den          
             out_uAOO[i] = u_AOO
             out_uNOO[i] = u_NOO
             out_uAOX[i] = u_AOX
@@ -552,11 +420,9 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             
             
     return [out_Sd, out_O2, out_NO3, out_NO2, out_NH4, out_N2O, out_N2, \
-            out_bHet, out_b1Den, out_b2Den, out_b3Den, out_b4Den, out_b5Den, out_b6Den, 
-            out_bHetC, out_b1DenC, out_b2DenC, out_b3DenC, out_b4DenC, out_b5DenC, out_b6DenC,            
+            out_bHet, out_b1Den, out_b2Den, out_b3Den, out_b4Den, out_b5Den, out_b6Den,           
             out_bAOO, out_bNOO, out_bAOX, \
             out_uHet, out_u1Den, out_u2Den, out_u3Den, out_u4Den, out_u5Den, out_u6Den,
-            out_uHetC, out_u1DenC, out_u2DenC, out_u3DenC, out_u4DenC, out_u5DenC, out_u6DenC,
             out_uAOO, out_uNOO, out_uAOX, \
             out_rHet, out_rHetAer, out_rO2C, out_r1Den, out_r2Den, out_r3Den, out_r4Den, out_r5Den, out_r6Den, out_rAOO, out_rNOO, out_rAOX, \
             out_b7Den, out_u7Den]
