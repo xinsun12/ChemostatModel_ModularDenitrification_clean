@@ -82,7 +82,7 @@ DGf_N2  =   18.18 * 1e3 #J/mol (aq)
 DGf_O2  =   16.54 * 1e3 #J/mol (aq)
 
 ## Calculating the standard free energy for the half reactions
-## Xin: 1, 2, 3, 4 is NO3-->NO2-->NO-->N2O-->N2
+## 1, 2, 3, 4 is NO3-->NO2-->NO-->N2O-->N2
 # unit of DGo below is J/mol
 DGheto = 0.5*DGf_H2O - 1/4*DGf_O2 - DGf_H 
 DG1o = 0.5*DGf_NO2 + 0.5*DGf_H2O - 0.5*DGf_NO3 - DGf_H 
@@ -150,9 +150,6 @@ f_oHet = calc_y(DGhet, DGom, ep, DGs) # old: y_oHet * dB/dO  # The fraction of e
 y_oHet =  f_oHet * dO/dB 
 y_oO2 = (f_oHet/dB) / ((1.0-f_oHet)/4.0)  # yield of biomass per unit oxygen reduced
 VmaxS = mumax_Het / y_oHet  # max mol Org N consum. rate per (mol BioN) per day
-
-# Copiotroph
-VmaxSC = VmaxS * 2 # based on Zakem at al. 2020 Nat comm: Vmax of copi = 10*oligo
 
 # nitrate reduction to nitrite (NO3 --> NO2), denstep = 1
 f_n1Den = calc_y(DG1, DGom, ep, DGs)       # fraction of electrons used for biomass synthesis
@@ -237,8 +234,6 @@ VmaxNO2_AOX = 50.8 #artvalue * mumax_AOX / y_no2AOX              # max uptake ra
 
 ### 4) Half-saturation constants (since the input conc will be in µM = mmol/m3, K will also be in µM)
 K_s = 0.1           # organic nitrogen (uncertain) uM
-# Copiotroph
-K_sC = 2#1 #use 2 instead of 1 to make sure all OM* of copio > that of oligo (based on Zakem at al. 2020 Nat comm: K of copi = 10*oligo
 
 K_n_Den = 4.0 # 4 – 25 µM NO2 for denitrifiers (Almeida et al. 1995)
 K_n_AOO = 0.1 #K_n_universal #0.1       # Martens-Habbena et al. 2009 Nature
