@@ -688,67 +688,6 @@ plt.tight_layout()
 os.chdir("YourFolderPath/ChemostatModel_ModularDenitrification_clean/figures")
 fig.savefig('Fig3_bar_Genes.png', dpi=300)
 
-#%% Fig4_copio/oligo ratio of den in model vs new analyses of metagenomic data
-
-colmap = lighten(cmo.haline, 0.8)
-
-fig = plt.figure(figsize=(10,3.2))
-gs = GridSpec(1, 2)
-
-            
-O2index = 20 # change this based on selected OM as input
-print(O20_exp[O2index])
-print(O20_exp[O2index]*dil)
-
-totalb = fin_b1Den + fin_b2Den + fin_b2Den + fin_b3Den + fin_b4Den + fin_b5Den + fin_b6Den\
-    + fin_b1DenC + fin_b2DenC + fin_b3DenC + fin_b4DenC + fin_b5DenC + fin_b6DenC\
-        + fin_bAOO + fin_bNOO + fin_bAOX + fin_bHet + fin_bHetC
-        
-# creat subplots
-ax1 = plt.subplot(gs[0,0])
-ax1.set_title('Model', fontsize=fslab)
-plt.plot(xpulse_Sd/pulse_int + Sd0_exp * dil, fin_b1Den[:,O2index]/totalb[:,O2index]*100, '-', color='skyblue',  label='Oligotrophs')
-plt.plot(xpulse_Sd/pulse_int + Sd0_exp * dil, fin_b1DenC[:,O2index]/totalb[:,O2index]*100, '-', color='royalblue',  label='Copiotrophs')
-
-plt.xticks(np.arange(0.07, 0.121, 0.01))
-plt.xlim([0.074, 0.114])
-plt.ylim([-0, 60.1])
-plt.yticks(np.arange(0, 60.1, 10))
-
-plt.legend(loc='upper right', fontsize=10)
-ax1.set_xlabel('OM supply with pulses (µM-N/d)', fontsize = 14)
-ax1.set_ylabel('Relative abundance (%)', fontsize = 14)
-
-ax2 = plt.subplot(gs[0,1])
-ax2.set_title('Observation', fontsize=fslab)
-
-Obs_Irene = pd.DataFrame({
-    'Open ocean an_O': [1.192255153],
-    'Open ocean an_C': [0.488400901],
-    'Coastal an_O': [0.970497249],
-    'Coastal an_C': [0.429973604],
-    'Open-ocean oxy_O': [0.194560795],
-    'Open-ocean oxy_C': [1.105152851],
-    'Coastal oxy_O': [0.554859302],
-    'Coastal oxy_C': [1.732662939]
-})
-data_for_plotting = Obs_Irene.T
-
-colors = ['skyblue', 'royalblue', 'skyblue', 'royalblue', 'skyblue', 'royalblue', 'skyblue', 'royalblue']
-
-plt.bar(data_for_plotting.index, data_for_plotting[0]*20, color=colors)
-plt.ylim([-0.1, 60.1])
-plt.yticks(np.arange(0, 60.1, 10))
-plt.xlabel('')
-plt.ylabel('Relative abundance (%)', fontsize = 14)
-plt.xticks('')
-plt.tight_layout()
-
-#%% Save the plot
-os.chdir("YourFolderPath/ChemostatModel_ModularDenitrification_clean/figures")
-fig.savefig('Fig4_CopioOligoDen-ModelVSData.png', dpi=300)
-
-
 #%% FigS_Pcolormesh_Contour plot_all nuts and rates
 fstic = 13
 fslab = 15
@@ -794,7 +733,7 @@ nh4_n2_AOX = (e_n2AOX*0.5*y_nh4AOX)
 
 # set x and y axes
 contourX = outputd2 * dil
-contourY = xpulse_Sd/pulse_int + Sd0_exp * dil #outputd1
+contourY = xpulse_Sd/pulse_int + Sd0_exp * dil
 
 # set colorbar range to be the same
 
@@ -803,7 +742,6 @@ colormax = round_up(np.max([fin_r1Den, fin_r2Den, fin_r3Den, fin_r4Den, fin_r5De
 colormax1 = round_up(np.max([fin_rHet, fin_rAOO, fin_rNOO, fin_rAOX]), 1) 
 
 # plot
-#p1 = ax1.pcolormesh(contourX, contourY, np.log(fin_O2+1e-6), cmap=colmap, ) #np.log(fin_O2+0.001) vmin=-4, vmax=2, 
 p1 = ax1.pcolormesh(contourX, contourY, fin_O2, cmap=colmap) #np.log(fin_O2+0.001)
 p2 = ax2.pcolormesh(contourX, contourY, fin_NO3, cmap=colmap)
 p3 = ax3.pcolormesh(contourX, contourY, fin_NO2, cmap=colmap) 
@@ -892,7 +830,6 @@ os.chdir("YourFolderPath/ChemostatModel_ModularDenitrification_clean/figures")
 fig.savefig('FigS_allotherresults_with/withoutNOB.png', dpi=300) 
 
 #%% FigS_Contour_copio-den-biomasses
-
 fstic = 13
 fslab = 15
 colmap = lighten(cmo.haline, 0.8)
