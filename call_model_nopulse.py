@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created in July 2023, last update: June 2024
+Created in July 2023, update for better performance
 
 Purpose
 -------
