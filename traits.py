@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created in March 2023, last update: June 2024
+Created in March 2023, update for better performance
     
 @authors: 
     Xin Sun, Emily Zakem, Pearse Buchanan
@@ -92,15 +92,15 @@ DG1234o = 1/10*DGf_N2 + 3/5*DGf_H2O - 1/5*DGf_NO3 - 6/5*DGf_H
 DG23o = 1/4*DGf_N2O + 3/4*DGf_H2O - 1/2*DGf_NO2 - 3/2*DGf_H 
 DG234o = 1/6*DGf_N2 + 2/3*DGf_H2O - 1/3*DGf_NO2 - 4/3*DGf_H 
 
-#avg concentrations (to initiate -- but don't want this to determine answer):
+#avg concentrations:
 NO3avg = 30 * 1e-6 #mol/L 
 NO2avg = 1e-6 #mol/L 
 N2Oavg = 1e-8 #mol/L 
 N2avg = 1e-4 #mol/L 
 O2avg = 1e-6 #mol/L 
 
-#per e- (In Julia, default based of log is e)
-DGhet = DGheto + R*T*np.log(1/O2avg**(1/4)/H) # Xin: add a set for aerobic heterotrophs
+#per e-
+DGhet = DGheto + R*T*np.log(1/O2avg**(1/4)/H)
 DG1 = DG1o + R*T*np.log(NO2avg**0.5/NO3avg**0.5/H) 
 DG4 = DG4o + R*T*np.log(N2avg**0.5/N2Oavg**0.5/H)
 DG123  = DG123o  + R*T*np.log(N2Oavg**(1/8)/NO3avg**(1/4)/H**(5/4)) 
@@ -120,33 +120,28 @@ DGom = om_energy*(Cd*12+Hd+Od*16+Nd*14)/dD
 b_energy = 3.33*1e3 #J/g cells from R&McC (estimate)
 Cb=5; Hb=7; Ob=2; Nb=1 # Based on (Zimmerman et al. 2014)
 dB=4*Cb+Hb-2*Ob-3*Nb
-DGpb = b_energy*(Cb*12+Hb+Ob*16+Nb*14)/dB #energy to synthesize cells from pyruvate
+DGpb = b_energy*(Cb*12+Hb+Ob*16+Nb*14)/dB
 
 ## efficiency of e transfer:
 ep = 0.6
 
 ## total energy needed for cell synthesis from given OM, including conv to pyruvate 
-DGp = 35.09*1e3 - DGom #e to convert C to pyruvate. CHECK this 35.09 -- units?
-#if Gp>=0; n=1; end;if Gp<0; n=-1; end 
-n=1 #assume for now DGp > 0 (typical)
-DGs = DGp/ep**n + DGpb/ep # total energy needed for synthesis. add uptake cost to this? 
-## total energy needed for cell synthesis from given OM:
-## energy needed to convert OM to pyruvate + energy needed to convert pyruvate to biomass
-##### Finish defining THERMODYNAMICs
+DGp = 35.09*1e3 - DGom 
+n=1
+DGs = DGp/ep**n + DGpb/ep # total energy needed for synthesis. 
 DGs = 300*1e3 # reset DGs to get the yield of aerobic hetero close to obs (0.2~0.3)
 
 dO = 29.1   # assumes constant stoichiometry of all sinking organic matter of C6.6-H10.9-O2.6-N using equation: d = 4C + H - 2O -3N
 dB = 20.0   # assumes constant stoichiometry of all heterotrophic bacteria of C5-H7-O2-N based on Zimmerman et al., 2014
 
 # solve for the yield of heterotrophic bacteria using approach of Sinsabaugh et al. 2013
-Y_max = 0.6     # (will not need this with GibbsFreeEnergy defined yield) maximum possible growth efficiency measured in the field
 B_CN = 5.0      # C:N of bacterial biomass based on Zimmerman et al. 2014
 OM_CN = 6.6     # C:N of labile dissolved organic matter (Letscher et al. 2015)
 K_CN = 0.5      # C:N half-saturation coefficient (Sinsabaugh & Follstad Shah 2012 - Ecoenzymatic Stoichiometry and Ecological Theory)
 EEA_CN = 1.123  # relative rate of enzymatic processing of complex C and complex N molecules into simple precursors for biosynthesis (Sinsabaugh & Follstad Shah 2012)
 
 # aerobic heterotrophy 
-f_oHet = calc_y(DGhet, DGom, ep, DGs) # old: y_oHet * dB/dO  # The fraction of electrons used for biomass synthesis (Eq A9 in Zakem et al. 2019 ISME)
+f_oHet = calc_y(DGhet, DGom, ep, DGs) # The fraction of electrons used for biomass synthesis (Eq A9 in Zakem et al. 2019 ISME)
 y_oHet =  f_oHet * dO/dB 
 y_oO2 = (f_oHet/dB) / ((1.0-f_oHet)/4.0)  # yield of biomass per unit oxygen reduced
 VmaxS = mumax_Het / y_oHet  # max mol Org N consum. rate per (mol BioN) per day
@@ -194,7 +189,6 @@ y_n6NO3 = (f_n6Den/dB) / ((1.0-f_n6Den)/4.0) # yield of biomass per unit nitrate
 e_n6Den = 1.0 / y_n6NO3         # moles N-N2O produced per mole biomass synthesised
 VmaxN_6Den = 50.8 
 
-
 # Bookend den (NO3 --> NO2, N2O-->N2), denstep = 2
 f_n7Den_NO3 = calc_y(DG1, DGom, ep, DGs) * (1 - P)       # fraction of electrons used for biomass synthesis
 y_n7Den_NO3 = f_n7Den_NO3 * dO/dB
@@ -212,14 +206,14 @@ y_nAOO = 0.0245         # mol N biomass per mol NH4 (Bayer et al. 2022; Zakem et
 d_AOO = 4*5 + 7 - 2*2 -3*1  # number of electrons produced
 f_AOO = y_nAOO / (6*(1/d_AOO - y_nAOO/d_AOO))         # fraction of electrons going to biomass synthesis from electron donor (NH4) (Zakem et al. 2022)
 y_oAOO = f_AOO/d_AOO / ((1-f_AOO)/4.0)                # mol N biomass per mol O2 !!not O-O2 (Bayer et al. 2022; Zakem et al. 2022)
-VmaxN_AOO = 50.8 #artvalue * mumax_AOO / y_nAOO            # max uptake rate of mol NH4 / mol cell N / day
+VmaxN_AOO = 50.8 #max uptake rate of mol NH4 / mol cell N / day
 
 # Chemoautotrophic nitrite oxidation (NO2 --> NO3)
 y_nNOO = 0.0126         # mol N biomass per mol NO2 (Bayer et al. 2022)
 d_NOO = 4*5 + 7 - 2*2 - 3*1
 f_NOO = (y_nNOO * d_NOO) /2          # fraction of electrons going to biomass synthesis from electron donor (NO2) (Zakem et al. 2022)
 y_oNOO = 4*f_NOO*(1-f_NOO)/d_NOO         # mol N biomass per mol O2 (Bayer et al. 2022)
-VmaxN_NOO = 50.8 # mumax_NOO / y_nNOO = 1/0.0126 = 79.4
+VmaxN_NOO = 50.8 
    
 
 # Chemoautotrophic anammox (NH4 + NO2 --> NO3 + N2)
@@ -228,20 +222,20 @@ y_no2AOX = 1./89                  # mol N biomass per mol NO2 (Lotti et al. 2014
 e_n2AOX = 150                     # mol N-N2 formed per mol biomass N synthesised ***Rounded to nearest whole number
 e_no3AOX = 13                     # mol NO3 formed per mol biomass N synthesised ***Rounded to nearest whole number
 
-VmaxNH4_AOX = 50.8 #artvalue * mumax_AOX / y_nh4AOX              # max uptake rate of mol NH4 / mol cell N / day
-VmaxNO2_AOX = 50.8 #artvalue * mumax_AOX / y_no2AOX              # max uptake rate of mol NO2 / mol cell N / day
+VmaxNH4_AOX = 50.8 #max uptake rate of mol NH4 / mol cell N / day
+VmaxNO2_AOX = 50.8 #max uptake rate of mol NO2 / mol cell N / day
 
 
 ### 4) Half-saturation constants (since the input conc will be in µM = mmol/m3, K will also be in µM)
 K_s = 0.1           # organic nitrogen (uncertain) uM
 
 K_n_Den = 4.0 # 4 – 25 µM NO2 for denitrifiers (Almeida et al. 1995)
-K_n_AOO = 0.1 #K_n_universal #0.1       # Martens-Habbena et al. 2009 Nature
-K_n_NOO = 0.1 #K_n_universal #0.1       # Reported from OMZ (Sun et al. 2017) and oligotrophic conditions (Zhang et al. 2020)
-K_nh4_AOX = 0.45 #K_n_universal #0.45    # Awata et al. 2013 for Scalindua
-K_no2_AOX = 0.45 #K_n_universal #0.45    # Awata et al. 2013 for Scalindua actually finds a K_no2 of 3.0 uM, but this excludes anammox completely in our experiments
+K_n_AOO = 0.1 # Martens-Habbena et al. 2009 Nature
+K_n_NOO = 0.1 # Reported from OMZ (Sun et al. 2017) and oligotrophic conditions (Zhang et al. 2020)
+K_nh4_AOX = 0.45 # Awata et al. 2013 for Scalindua
+K_no2_AOX = 0.45 # Awata et al. 2013 for Scalindua actually finds a K_no2 of 3.0 uM, but this excludes anammox completely in our experiments
 
-K_n2o_Den = 0.3*2 #1e-4 # 0.3*2   # *2 convert µM N2O into µM N-N2O based on (Sun et al., 2021) in ODZ k = 0.3 µM N2O, in oxic layer = 1.4~2.8 µM
+K_n2o_Den = 0.3*2 #*2 convert µM N2O into µM N-N2O based on (Sun et al., 2021) in ODZ k = 0.3 µM N2O, in oxic layer = 1.4~2.8 µM
 
 K_o2_aer = 0.2   # (µM-O2) 10 to 200 nM at extremely low oxygen concentrations (Tiano et al., 2014); 200 nM (low affinity terminal oxidases) (Morris et al., 2013)
 K_o2_aoo = 0.333  # (µM-O2) 333 nM at oxic-anoxic interface (Bristow et al., 2016)
