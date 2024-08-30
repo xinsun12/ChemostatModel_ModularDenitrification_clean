@@ -17,7 +17,7 @@ Purpose
 import numpy as np
 from numba import jit
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
              pulse_Sd, pulse_O2, pulse_int, \
              K_o2_aer, K_o2_aoo, K_o2_noo, \
