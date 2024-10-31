@@ -126,7 +126,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
     # begin the loop
     for t in np.arange(1,timesteps+1,1):
 
-        # 3.	‘MMµ’: Define Vmax by µmax and yield, like the other Vmax in the model, then add M-M equation to that.
+        # uptake rate equations
         VmaxO2_aer = mumax_Het / y_oO2
         p_O2_aer = VmaxO2_aer * m_O2 / (K_o2_aer + m_O2)
 
@@ -228,7 +228,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             den_NitratetoN2O = u_6Den * m_b6Den / y_n6NO3 # nitrate uptake rate by NO3-->N2O
                
         
-        ## Below are the change of OM, DIN.. over time. For example, d[OM]/dt, d[NO3]/dt
+        ## Below are the changes in OM, DIN.. over time. For example, d[OM]/dt, d[NO3]/dt
         # Organic matter
         ddt_Sd = dil * (in_Sd - m_Sd) - heterotrophy
         
@@ -364,7 +364,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             m_O2 = m_O2 + pulse_O2
         
         
-        ### Record output at regular interval set above
+        ### Record output at the regular interval set above
         if t % interval == 0:
             #print(t)
             i += 1
@@ -398,13 +398,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
             out_uAOX[i] = u_AOX
             out_rHet[i] = heterotrophy
             out_rHetAer[i] = aer_heterotrophy
-            out_rO2C[i] = oxy_consumption
-            '''
-            # Oxygen consumption rate
-            oxy_consumption = u_Het * m_bHet / y_oO2    \
-                              + u_AOO * m_bAOO / y_oAOO \
-                              + u_NOO * m_bNOO / y_oNOO
-             '''                 
+            out_rO2C[i] = oxy_consumption             
             out_r1Den[i] = den_nar # nitrate uptake rate by nitrate reducers 
             out_r2Den[i] = den_nir  # nitrite uptake rate by NO2-->N2 
             out_r3Den[i] = den_full # nitrate uptake rate by NO3-->N2
