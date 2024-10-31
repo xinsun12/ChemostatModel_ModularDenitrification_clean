@@ -174,7 +174,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
 
         
         ###
-        ### Change in state variables per day (ddt)
+        ### Change in state variables per timestep (ddt)
         ###
                    
         ### rates
