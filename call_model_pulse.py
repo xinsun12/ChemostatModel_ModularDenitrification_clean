@@ -301,7 +301,6 @@ del results
 del out_Sd, out_O2, out_NO3, out_NO2, out_NH4, out_N2, out_N2O
 del out_bHet, out_b1Den, out_b2Den, out_b3Den, out_b4Den, out_b5Den, out_b6Den, out_b7Den, out_bAOO, out_bNOO, out_bAOX
 del out_uHet, out_u1Den, out_u2Den, out_u3Den, out_u4Den, out_u5Den, out_u6Den, out_u7Den, out_uAOO, out_uNOO, out_uAOX
-del out_uHetC, out_u1DenC, out_u2DenC, out_u3DenC, out_u4DenC, out_u5DenC, out_u6DenC,
 del out_rHet, out_rHetAer, out_rO2C, out_r1Den, out_r2Den, out_r3Den, out_r4Den, out_r5Den, out_r6Den, out_rAOO, out_rNOO, out_rAOX
 
 
@@ -828,124 +827,6 @@ plt.tight_layout()
 #%% Save the plot
 os.chdir("YourFolderPath/ChemostatModel_ModularDenitrification_clean/figures")
 fig.savefig('FigS_allotherresults_with/withoutNOB.png', dpi=300) 
-
-#%% FigS_Contour_copio-den-biomasses
-fstic = 13
-fslab = 15
-colmap = lighten(cmo.haline, 0.8)
-
-
-fig = plt.figure(figsize=(12,14))
-gs = GridSpec(4, 3)
-
-ax1 = plt.subplot(gs[0,0])
-ax2 = plt.subplot(gs[0,1])
-ax3 = plt.subplot(gs[0,2])
-ax4 = plt.subplot(gs[1,0])
-ax5 = plt.subplot(gs[1,1])
-ax6 = plt.subplot(gs[1,2])
-
-ax7 = plt.subplot(gs[2,0])
-ax8 = plt.subplot(gs[2,1])
-ax9 = plt.subplot(gs[2,2])
-ax10 = plt.subplot(gs[3,0])
-ax11 = plt.subplot(gs[3,1])
-ax12 = plt.subplot(gs[3,2])
-
-
-nh4_n2_AOX = (e_n2AOX*0.5*y_nh4AOX)
-totalb = fin_b1Den + fin_b2Den + fin_b2Den + fin_b3Den + fin_b4Den + fin_b5Den + fin_b6Den\
-    + fin_b1DenC + fin_b2DenC + fin_b3DenC + fin_b4DenC + fin_b5DenC + fin_b6DenC\
-        + fin_bAOO + fin_bNOO + fin_bAOX + fin_bHet + fin_bHetC
-
-def colbarmax(fin):
-    return int(np.max(fin)*1.2)
-
-contourX = outputd2 * dil
-contourY = xpulse_Sd/pulse_int + Sd0_exp * dil
-
-# set colorbar range to be the same
-colormin = 0.0
-colormax = 0.8
-
-ax1.set_title('Biomass NO$_3$$^-$→NO$_2$$^-$ (µM-N)', fontsize=fslab)
-p1 = ax1.pcolormesh(contourX, contourY, fin_b1Den, vmin=colormin, vmax=colormax, cmap=colmap) 
-
-ax2.set_title('Biomass NO$_3$$^-$→N$_2$O (µM-N)', fontsize=fslab)
-p2 = ax2.pcolormesh(contourX, contourY, fin_b6Den, vmin=colormin, vmax=colormax, cmap=colmap)
-
-ax3.set_title('Biomass NO$_3$$^-$→N$_2$ (µM-N)', fontsize=fslab)
-p3 = ax3.pcolormesh(contourX, contourY, fin_b3Den, vmin=colormin, vmax=colormax, cmap=colmap) 
-
-ax4.set_title('Biomass NO$_2$$^-$→N$_2$O (µM-N)', fontsize=fslab)
-p4 = ax4.pcolormesh(contourX, contourY, fin_b4Den, vmin=colormin, vmax=colormax, cmap=colmap)
-
-ax5.set_title('Biomass NO$_2$$^-$→N$_2$ (µM-N)', fontsize=fslab)
-p5 = ax5.pcolormesh(contourX, contourY, fin_b2Den, vmin=colormin, vmax=colormax, cmap=colmap)
-
-ax6.set_title('Biomass N$_2$O→N$_2$ (µM-N)', fontsize=fslab)
-p6 = ax6.pcolormesh(contourX, contourY, fin_b5Den, vmin=colormin, vmax=colormax, cmap=colmap) 
-
-
-ax7.set_title('Copio biomass NO$_3$$^-$→NO$_2$$^-$ (µM-N)', fontsize=fslab)
-p7 = ax7.pcolormesh(contourX, contourY, fin_b1DenC, vmin=colormin, vmax=colormax, cmap=colmap)
-ax8.set_title('Copio biomass NO$_3$$^-$→N$_2$O (µM-N)', fontsize=fslab) 
-p8 = ax8.pcolormesh(contourX, contourY, fin_b6DenC, vmin=colormin, vmax=colormax, cmap=colmap)
-ax9.set_title('Copio biomass NO$_3$$^-$→N$_2$ (µM-N)', fontsize=fslab)
-p9 = ax9.pcolormesh(contourX, contourY, fin_b3DenC, vmin=colormin, vmax=colormax, cmap=colmap) 
-ax10.set_title('Copio biomass NO$_2$$^-$→N$_2$O (µM-N)', fontsize=fslab)
-p10 = ax10.pcolormesh(contourX, contourY, fin_b4DenC, vmin=colormin, vmax=colormax, cmap=colmap) 
-ax11.set_title('Copio biomass NO$_2$$^-$→N$_2$ (µM-N)', fontsize=fslab)
-p11 = ax11.pcolormesh(contourX, contourY, fin_b2DenC, vmin=colormin, vmax=colormax, cmap=colmap) 
-ax12.set_title('Copio biomass N$_2$O→N$_2$ (µM-N)', fontsize=fslab)
-p12 = ax12.pcolormesh(contourX, contourY, fin_b5DenC, vmin=colormin, vmax=colormax, cmap=colmap) 
-
-
-## delete axis title of some subplots
-ax1.tick_params(labelsize=fstic, labelbottom=False)
-ax2.tick_params(labelsize=fstic, labelbottom=False, labelleft=False)
-ax3.tick_params(labelsize=fstic, labelbottom=False, labelleft=False)
-ax4.tick_params(labelsize=fstic, labelbottom=False) #
-ax5.tick_params(labelsize=fstic, labelleft=False, labelbottom=False) 
-ax6.tick_params(labelsize=fstic, labelleft=False, labelbottom=False) 
-ax7.tick_params(labelsize=fstic, labelbottom=False)
-ax8.tick_params(labelsize=fstic, labelbottom=False, labelleft=False)
-ax9.tick_params(labelsize=fstic, labelbottom=False, labelleft=False)
-ax10.tick_params(labelsize=fstic)
-ax11.tick_params(labelsize=fstic, labelleft=False)
-ax12.tick_params(labelsize=fstic, labelleft=False)
-
-## add axis title to some subplots
-contourYlabel = 'OM supply with pulses (µM-N/d)' 
-contourXlabel = 'O$_2$ supply (µM/d)'
-
-
-ax4.set_ylabel(contourYlabel, fontsize=fslab)
-
-ax10.set_xlabel(contourXlabel, fontsize=fslab)
-ax11.set_xlabel(contourXlabel, fontsize=fslab)
-ax12.set_xlabel(contourXlabel, fontsize=fslab)
-
-cbar1 = fig.colorbar(p1, ax=ax1)
-cbar2 = fig.colorbar(p2, ax=ax2)
-cbar3 = fig.colorbar(p3, ax=ax3)
-cbar4 = fig.colorbar(p4, ax=ax4)
-cbar5 = fig.colorbar(p5, ax=ax5)
-cbar6 = fig.colorbar(p6, ax=ax6)
-cbar7 = fig.colorbar(p7, ax=ax7)
-cbar8 = fig.colorbar(p8, ax=ax8)
-cbar9 = fig.colorbar(p9, ax=ax9)
-cbar10 = fig.colorbar(p10, ax=ax10)
-cbar11 = fig.colorbar(p11, ax=ax11)
-cbar12 = fig.colorbar(p12, ax=ax12)
-
-
-plt.tight_layout()
-
-
-#%% Save the plot
-os.chdir("YourFolderPath/ChemostatModel_ModularDenitrification_clean/figures")
-fig.savefig('FigS_OligoCopio_biomass.png', dpi=300)
 
 
 #%% Save the model output
