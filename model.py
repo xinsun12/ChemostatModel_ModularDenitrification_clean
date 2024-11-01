@@ -158,14 +158,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
         u_4Den = np.fmax(0.0, np.fmin(p_Sd * y_n4Den, p_4DenNO2 * y_n4NO2))         # (NO2-->N2O)
         u_5Den = np.fmax(0.0, np.fmin(p_Sd * y_n5Den, p_N2O_den * y_n5N2O))         # (N2O-->N2)
         u_6Den = np.fmax(0.0, np.fmin(p_Sd * y_n6Den, p_6DenNO3 * y_n6NO3))         # (NO2-->N2O)
-        u_7Den = np.fmax(np.fmax(0.0, np.fmin(p_Sd * y_n7Den_NO3, p_1DenNO3 * y_n7NO3)), np.fmax(0.0, np.fmin(p_Sd * y_n7Den_N2O, p_N2O_den * y_n7N2O)))         # (bookend: NO3-->NO2, N2O-->N2)
-        u_HetC = np.fmax(0.0, np.fmin(p_SdC * y_oHet, p_O2_aer * y_oO2))          # mol Org / day * mol Biomass / mol Org || mol O2 / day * mol Biomass / mol O2      
-        u_1DenC = np.fmax(0.0, np.fmin(p_SdC * y_n1Den, p_1DenNO3 * y_n1NO3))         # mol Org / day * mol Biomass / mol Org || mol NO3 / day * mol Biomass / mol NO3
-        u_2DenC = np.fmax(0.0, np.fmin(p_SdC * y_n2Den, p_2DenNO2 * y_n2NO2))         # mol Org / day * mol Biomass / mol Org || mol NO2 / day * mol Biomass / mol NO2
-        u_3DenC = np.fmax(0.0, np.fmin(p_SdC * y_n3Den, p_3DenNO3 * y_n3NO3))         # mol Org / day * mol Biomass / mol Org || mol NO3 / day * mol Biomass / mol NO3       
-        u_4DenC = np.fmax(0.0, np.fmin(p_SdC * y_n4Den, p_4DenNO2 * y_n4NO2))         # 
-        u_5DenC = np.fmax(0.0, np.fmin(p_SdC * y_n5Den, p_N2O_den * y_n5N2O))         # 
-        u_6DenC = np.fmax(0.0, np.fmin(p_SdC * y_n6Den, p_6DenNO3 * y_n6NO3))  
+        u_7Den = np.fmax(np.fmax(0.0, np.fmin(p_Sd * y_n7Den_NO3, p_1DenNO3 * y_n7NO3)), np.fmax(0.0, np.fmin(p_Sd * y_n7Den_N2O, p_N2O_den * y_n7N2O)))         # (bookend: NO3-->NO2, N2O-->N2)  
 
         u_AOO = np.fmax(0.0, np.fmin(p_NH4_AOO * y_nAOO, p_O2_aoo * y_oAOO))    # mol NH4 / day * mol Biomass / mol NH4 || mol O2 / day * mol Biomass / mol O2
         u_NOO = np.fmax(0.0, np.fmin(p_NO2_NOO * y_nNOO, p_O2_noo * y_oNOO))    # mol NO2 / day * mol Biomass / mol NO2 || mol O2 / day * mol Biomass / mol O2
@@ -293,7 +286,7 @@ def OMZredox(timesteps, nn_output, dt, dil, out_at_day, \
                      + u_2Den * m_b2Den * e_n2Den   \
                      + u_3Den * m_b3Den * e_n3Den   \
                      + u_5Den * m_b5Den * e_n5Den \
-                     + u_7Den * m_b7Den * e_n7Den_N2O
+                     + u_7Den * m_b7Den * e_n7Den_N2O \
                      + u_AOX * m_bAOX * e_n2AOX
 
         # N2O gas (produced by 54 and 56) (consumed by 55)
