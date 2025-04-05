@@ -1,4 +1,5 @@
-## An idealized OMZ ecosystem model
+## An idealized OMZ ecosystem model for Ecological dynamics explain modular denitrification in the ocean (https://www.pnas.org/doi/abs/10.1073/pnas.2417421121)
+
 ### 1. model.py 
 The model
 ### 2. traits.py 
